@@ -138,7 +138,7 @@ var timerId = setInterval(function() {
         var s=parseInt(result[i].quote.substr(1)); 
         
              
-        if(s>5000){
+        if(s>40000){
           
           bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
           bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
@@ -156,7 +156,7 @@ var timerId = setInterval(function() {
    
       if (result[i].quote.indexOf("-") !== -1    ){
         var s=parseInt(result[i].quote.substr(1)); 
-        if(s>=5000){
+        if(s>=40000){
           bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
           bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
 
