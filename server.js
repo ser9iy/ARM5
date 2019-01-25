@@ -1,14 +1,15 @@
 const express = require('express')
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
-
+const TelegramBot = require('node-telegram-bot-api');
+const token = '743684070:AAHERNRtWQaZHi2ROJXdiRiLdarlbgZJTQc';
 const app = express()
 const bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient
-
+var fs = require('fs');
 var db
 var dbUsers = require('./db');
-
+//var jsParsed=require('./logic.json');
 
 
 
@@ -88,6 +89,114 @@ app.use(express.static('public'))
 app.use(passport.initialize());
 app.use(passport.session());
 
+//BOT
+const bot = new TelegramBot(token, {polling: true});
+bot.onText(/\/start/, (msg, match) => {
+  
+
+  const chatId = msg.chat.id;
+  const resp = match[1]; // the captured "whatever"
+  const id=msg.chat.id;
+  fs.appendFile('chatids.txt', id+'-', function (err) {
+    if (err) throw err;
+    console.log('Saved!');
+  });
+  // send back the matched "whatever" to the chat
+  bot.sendMessage(chatId, 'Бот почав роботу, будь-які +/- зміни вище певної суми будуть відправлені. Бот на стадії розробки.Відправивши звичайне повідомлення отримаєте дані по залах');
+});
+
+// Listen for any kind of message. There are different kinds of
+// messages.
+bot.on('message', (msg) => {
+  const chatId = msg.chat.id;
+  const id=msg.chat.id
+  // send a message to the chat acknowledging receipt of their message
+  var content;
+  db.collection('quotes').find().toArray((err, result) => {
+    if (err) return console.log(err)
+    for(var i=0; i<result.length; i++){
+    bot.sendMessage(chatId, result[i].name+' '+result[i].quote+'  Картки: '+result[i].cardsCash);
+    }
+  });
+  
+  
+ // bot.sendMessage(chatId,'ok');
+
+});
+//BOT END
+
+var timerId = setInterval(function() {
+  //bot.sendMessage(626376656, 'Timer');
+  //bot.sendMessage(481503296, 'Login');
+ // var dani=[];
+  db.collection('quotes').find().toArray((err, result) => {
+    if (err) return console.log(err)
+    
+    for(var i=0; i<result.length; i++){
+      if(result[i].msg==false){
+      if (result[i].quote.indexOf("+") !== -1){
+        var s=parseInt(result[i].quote.substr(1)); 
+        
+             
+        if(s>5000){
+          
+          bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
+
+          db.collection('quotes')
+          .findOneAndUpdate({name: result[i].name}, {
+            $set: {              
+              msg:true,           
+              
+            }
+          });
+        }
+        
+      }
+   
+      if (result[i].quote.indexOf("-") !== -1    ){
+        var s=parseInt(result[i].quote.substr(1)); 
+        if(s>=5000){
+          bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
+
+          db.collection('quotes')
+          .findOneAndUpdate({name: result[i].name}, {
+            $set: {              
+              msg:true,           
+              
+            }
+          });
+        }
+      }
+    }
+        
+      
+     
+    }
+    
+  })
+  
+}, 60000);
+
+var timerId = setInterval(function() {
+  db.collection('quotes').find().toArray((err, result) => {
+    if (err) return console.log(err)
+    
+    for(var i=0; i<result.length; i++){
+  db.collection('quotes')
+  .findOneAndUpdate({name: result[i].name}, {
+    $set: {              
+      msg:false,           
+      
+    }
+  });}})
+}, 7200000);
+
+
+
+
+
 
 
 
@@ -99,6 +208,7 @@ app.get('/',
 
 app.get('/login',
   function(req, res){
+   
     res.render('login');
   });
   
@@ -116,6 +226,7 @@ app.get('/logout',
 
 
 app.get('/dashboard',require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
+  
   db.collection('quotes').find().toArray((err, result) => {
     if (err) return console.log(err)
     res.render('index.ejs', {quotes: result})
