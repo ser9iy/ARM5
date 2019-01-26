@@ -102,7 +102,7 @@ bot.onText(/\/start/, (msg, match) => {
     console.log('Saved!');
   });
   // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, id+'Бот почав роботу, будь-які +/- зміни вище певної суми будуть відправлені. Бот на стадії розробки.Відправивши звичайне повідомлення отримаєте дані по залах');
+  bot.sendMessage(chatId, 'Бот почав роботу, будь-які +/- зміни вище певної суми будуть відправлені. Бот на стадії розробки.Відправивши звичайне повідомлення отримаєте дані по залах'+'.Ваш id:'+id);
 });
 
 // Listen for any kind of message. There are different kinds of
@@ -112,15 +112,15 @@ bot.on('message', (msg) => {
   const id=msg.chat.id
   // send a message to the chat acknowledging receipt of their message
   var content;
-  db.collection('quotes').find().toArray((err, result) => {
+ /* db.collection('quotes').find().toArray((err, result) => {
     if (err) return console.log(err)
     for(var i=0; i<result.length; i++){
     bot.sendMessage(chatId, result[i].name+' '+result[i].quote+'  Картки: '+result[i].cardsCash);
     }
-  });
+  });*/
   
   
- // bot.sendMessage(chatId,'ok');
+  bot.sendMessage(chatId,'ok id');
 
 });
 //BOT END
@@ -142,7 +142,8 @@ var timerId = setInterval(function() {
           
           bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
           bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
-
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
           db.collection('quotes')
           .findOneAndUpdate({name: result[i].name}, {
             $set: {              
@@ -158,6 +159,8 @@ var timerId = setInterval(function() {
         var s=parseInt(result[i].quote.substr(1)); 
         if(s>=40000){
           bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
           bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
 
           db.collection('quotes')
