@@ -120,7 +120,7 @@ bot.on('message', (msg) => {
   });*/
   
   
-  bot.sendMessage(chatId,'ok id');
+  bot.sendMessage(chatId,'ok id:'+id);
 
 });
 //BOT END
