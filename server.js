@@ -102,7 +102,7 @@ bot.onText(/\/start/, (msg, match) => {
     console.log('Saved!');
   });
   // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, 'Бот почав роботу, будь-які +/- зміни вище певної суми будуть відправлені. Бот на стадії розробки.Відправивши звичайне повідомлення отримаєте дані по залах');
+  bot.sendMessage(chatId, id+'Бот почав роботу, будь-які +/- зміни вище певної суми будуть відправлені. Бот на стадії розробки.Відправивши звичайне повідомлення отримаєте дані по залах');
 });
 
 // Listen for any kind of message. There are different kinds of
