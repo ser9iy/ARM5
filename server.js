@@ -11,7 +11,7 @@ var db
 var dbUsers = require('./db');
 //var jsParsed=require('./logic.json');
 
-
+//var debug=require('debug');
 
 
 
@@ -119,8 +119,9 @@ bot.on('message', (msg) => {
     }
   });*/
   
-  
-  bot.sendMessage(chatId,'ok id:'+id);
+ // debug('__________________________mess________');
+
+  bot.sendMessage(chatId,'v.2.0 ok id:'+id);
 
 });
 //BOT END
@@ -131,48 +132,125 @@ var timerId = setInterval(function() {
  // var dani=[];
   db.collection('quotes').find().toArray((err, result) => {
     if (err) return console.log(err)
+   // bot.sendMessage(626376656, 'STARTED');
     
     for(var i=0; i<result.length; i++){
-      if(result[i].msg==false){
+      //bot.sendMessage(626376656, 'q');
+      
       if (result[i].quote.indexOf("+") !== -1){
-        var s=parseInt(result[i].quote.substr(1)); 
+        var know=parseInt(result[i].quote.substr(1));
+        var last=parseInt(result[i].lt);
+        var z=30000;
+        var t=10000;
+        if((result[i].name=='Живова 7')||(result[i].name=='Обнова'))
+        {
+          z=45000;
+        }
+        //bot.sendMessage(626376656, 'know:'+know+'last:'+last);
         
-             
-        if(s>40000){
-          
-          bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
-          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
-          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
-          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+s+' '+' На картках:'+result[i].cardsCash);
-          db.collection('quotes')
+          if((know>z)&&(last<1)){
+        db.collection('quotes')
           .findOneAndUpdate({name: result[i].name}, {
             $set: {              
-              msg:true,           
+              lt:know,           
               
             }
+            
           });
+          bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':+'+know+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(464115643,'Зверніть увагу: '+result[i].name+':+'+know+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+know+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(690655842,'Зверніть увагу: '+result[i].name+':+'+know+' '+' На картках:'+result[i].cardsCash);
+          
         }
+      
+
+        else if((know>z)&&((know-last)>=t)){
+        db.collection('quotes')
+          .findOneAndUpdate({name: result[i].name}, {
+            $set: {              
+              lt:know,           
+              
+            }
+            
+          });
+        bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':+'+know+' '+' На картках:'+result[i].cardsCash);
+        bot.sendMessage(464115643,'Зверніть увагу: '+result[i].name+':+'+know+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':+'+know+' '+' На картках:'+result[i].cardsCash);
+          bot.sendMessage(690655842,'Зверніть увагу: '+result[i].name+':+'+know+' '+' На картках:'+result[i].cardsCash);
+      }
+
+        if((know<z)&&(last>2)){
+        db.collection('quotes')
+        .findOneAndUpdate({name: result[i].name}, {
+          $set: {              
+            lt:0,           
+            
+          }
+          
+        });
+      }
+        
         
       }
    
       if (result[i].quote.indexOf("-") !== -1    ){
-        var s=parseInt(result[i].quote.substr(1)); 
-        if(s>=40000){
-          bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
-          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
-          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
-          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+s+' '+' На картках:'+result[i].cardsCash);
+        var know=parseInt(result[i].quote.substr(1));
+        var last=parseInt(result[i].quote.lt);
+        var z=30000;
+        var t=10000;
+        if((result[i].name=='Живова 7')||(result[i].name=='Обнова'))
+        {
+          z=45000;
+        } 
 
-          db.collection('quotes')
+          if((know>z)&&(last<2)){
+        db.collection('quotes')
           .findOneAndUpdate({name: result[i].name}, {
             $set: {              
-              msg:true,           
+              lt:know,           
               
             }
+            
           });
+          bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':-'+know+' '-' На картках:'+result[i].cardsCash);
+          bot.sendMessage(464115643,'Зверніть увагу: '+result[i].name+':-'+know+' '-' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+know+' '-' На картках:'+result[i].cardsCash);
+          bot.sendMessage(690655842,'Зверніть увагу: '+result[i].name+':-'+know+' '-' На картках:'+result[i].cardsCash);
+          
         }
+      
+
+        else if((know>z)&&((know-last)>=t)){
+        db.collection('quotes')
+          .findOneAndUpdate({name: result[i].name}, {
+            $set: {              
+              lt:know,           
+              
+            }
+            
+          });
+          bot.sendMessage(626376656,'Зверніть увагу: '+result[i].name+':-'+know+' '-' На картках:'+result[i].cardsCash);
+          bot.sendMessage(464115643,'Зверніть увагу: '+result[i].name+':-'+know+' '-' На картках:'+result[i].cardsCash);
+          bot.sendMessage(481503296,'Зверніть увагу: '+result[i].name+':-'+know+' '-' На картках:'+result[i].cardsCash);
+          bot.sendMessage(690655842,'Зверніть увагу: '+result[i].name+':-'+know+' '-' На картках:'+result[i].cardsCash);
       }
-    }
+
+        if((know<z)&&(last>z)){
+        db.collection('quotes')
+        .findOneAndUpdate({name: result[i].name}, {
+          $set: {              
+            lt:0,           
+            
+          }
+          
+        });
+      }
+        
+        
+        
+      }
+    
         
       
      
@@ -182,19 +260,7 @@ var timerId = setInterval(function() {
   
 }, 60000);
 
-var timerId = setInterval(function() {
-  db.collection('quotes').find().toArray((err, result) => {
-    if (err) return console.log(err)
-    
-    for(var i=0; i<result.length; i++){
-  db.collection('quotes')
-  .findOneAndUpdate({name: result[i].name}, {
-    $set: {              
-      msg:false,           
-      
-    }
-  });}})
-}, 7200000);
+
 
 
 
@@ -232,6 +298,19 @@ app.get('/dashboard',require('connect-ensure-login').ensureLoggedIn(), (req, res
   
   db.collection('quotes').find().toArray((err, result) => {
     if (err) return console.log(err)
+    for(var i=0;i<result.length;i++){
+      db.collection('quotes')
+  .findOneAndUpdate({name: req.body.name}, {
+    $set: {
+      
+      lt:2 ,
+      
+      
+     
+      
+    }
+  })
+    }
     res.render('index.ejs', {quotes: result})
   })
 })
